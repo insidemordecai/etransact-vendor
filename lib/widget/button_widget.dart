@@ -1,3 +1,5 @@
+import 'package:etransact_vendor/constants.dart';
+import 'package:etransact_vendor/model/palette.dart';
 import 'package:flutter/material.dart';
 
 class ButtonWidget extends StatelessWidget {
@@ -15,7 +17,8 @@ class ButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: const Color.fromRGBO(29, 194, 95, 1),
+          primary: Palette.kTeal,
+          shape: kRoundedBorder,
           minimumSize: const Size.fromHeight(50),
         ),
         child: buildContent(),
