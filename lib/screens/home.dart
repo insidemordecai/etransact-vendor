@@ -1,13 +1,13 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart';
 
 import 'package:etransact_vendor/model/sidebar.dart';
 import 'package:etransact_vendor/api/firebase_api.dart';
 import 'package:etransact_vendor/widget/button_widget.dart';
+import '../constants.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key, required this.uid}) : super(key: key);
@@ -21,11 +21,17 @@ class _HomeState extends State<Home> {
   final String title = "eTransact";
 
   UploadTask? task;
-  File? file;
+  Uint8List? file;
+  String? fileName;
+  late String userEmail;
+  late String userDirectory;
+  late String displayedText;
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final fileName = file != null ? basename(file!.path) : 'No File Selected';
+    displayedText = (file != null ? fileName : 'No File Selected')!;
 
     return Scaffold(
       appBar: AppBar(
@@ -34,29 +40,57 @@ class _HomeState extends State<Home> {
       body: Container(
         padding: const EdgeInsets.all(32),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ButtonWidget(
-                text: 'Select File',
-                icon: Icons.attach_file,
-                onClicked: selectFile,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                fileName,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-              ),
-              const SizedBox(height: 48),
-              ButtonWidget(
-                text: 'Upload File',
-                icon: Icons.cloud_upload_outlined,
-                onClicked: uploadFile,
-              ),
-              const SizedBox(height: 20),
-              task != null ? buildUploadStatus(task!) : Container(),
-            ],
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ButtonWidget(
+                  text: 'Select File',
+                  icon: Icons.attach_file,
+                  onClicked: selectFile,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  displayedText,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 48),
+                TextFormField(
+                  textAlign: TextAlign.center,
+                  onChanged: (value) {
+                    userEmail = value;
+                    userDirectory = userEmail + '/';
+                  },
+                  decoration: kTextFieldDecoration.copyWith(
+                    hintText: 'Enter customer email',
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Enter an Email Address';
+                    } else if (!value.contains('@')) {
+                      return 'Please enter a valid email address';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 48),
+                ButtonWidget(
+                  text: 'Upload File',
+                  icon: Icons.cloud_upload_outlined,
+                  onClicked: () {
+                    if (_formKey.currentState!.validate()) {
+                      uploadFile();
+                    }
+                  },
+                ),
+                const SizedBox(height: 20),
+                task != null ? buildUploadStatus(task!) : Container(),
+              ],
+            ),
           ),
         ),
       ),
@@ -68,18 +102,23 @@ class _HomeState extends State<Home> {
     final result = await FilePicker.platform.pickFiles(allowMultiple: false);
 
     if (result == null) return;
-    final path = result.files.single.path!;
+    final fileBytes = result.files.single.bytes!;
 
-    setState(() => file = File(path));
+    setState(() {
+      file = fileBytes;
+      fileName = result.files.single.name;
+    });
   }
 
   Future uploadFile() async {
-    if (file == null) return;
+    if (file == null) {
+      kShowToast('Please select a file!');
+      return;
+    }
 
-    final fileName = basename(file!.path);
-    final destination = 'files/$fileName';
+    final destination = '$userDirectory/$fileName';
 
-    task = FirebaseApi.uploadFile(destination, file!);
+    task = FirebaseApi.uploadBytes(destination, file!);
     setState(() {});
 
     if (task == null) return;
