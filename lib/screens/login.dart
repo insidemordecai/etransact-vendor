@@ -3,7 +3,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import 'home.dart';
 import 'package:etransact_vendor/constants.dart';
@@ -90,26 +89,20 @@ class _LogInState extends State<LogIn> {
                         showSpinner = false;
                       });
 
-                      Fluttertoast.showToast(
-                        msg:
-                            'No user found for that email. Re-enter credentials',
-                      );
+                      kShowToast(
+                          'No user found for that email. Re-enter credentials');
                     } else if (e.code == 'wrong-password') {
                       setState(() {
                         showSpinner = false;
                       });
 
-                      Fluttertoast.showToast(
-                        msg: 'Wrong password. Re-enter credentials',
-                      );
+                      kShowToast('Wrong password. Re-enter credentials');
                     } else {
                       setState(() {
                         showSpinner = false;
                       });
 
-                      Fluttertoast.showToast(
-                        msg: 'Error. Try again!',
-                      );
+                      kShowToast('Error. Try again!');
                     }
                   }
                 },

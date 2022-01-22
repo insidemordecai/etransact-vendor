@@ -3,7 +3,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import 'home.dart';
@@ -146,7 +145,7 @@ class _SignUpState extends State<SignUp> {
                           showSpinner = false;
                         });
 
-                        Fluttertoast.showToast(msg: errorMessage);
+                        kShowToast(errorMessage);
                       }
                     }
                   },
