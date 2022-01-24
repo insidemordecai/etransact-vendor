@@ -18,7 +18,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final String title = "eTransact";
+  final String title = 'eTransact';
+  final String subTitle = 'Vendor';
 
   UploadTask? task;
   Uint8List? file;
@@ -35,66 +36,81 @@ class _HomeState extends State<Home> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        centerTitle: true,
+        leading: const Icon(Icons.home_rounded),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(title),
+            const SizedBox(width: 4),
+            Text(
+              subTitle,
+              style: const TextStyle(color: Colors.white38),
+            )
+          ],
+        ),
       ),
       body: Container(
         padding: const EdgeInsets.all(32),
         child: Center(
           child: Form(
             key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ButtonWidget(
-                  text: 'Select File',
-                  icon: Icons.attach_file,
-                  onClicked: selectFile,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  displayedText,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
+            child: SizedBox(
+              width: 500.0,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ButtonWidget(
+                    text: 'Select File',
+                    icon: Icons.attach_file,
+                    onClicked: selectFile,
                   ),
-                ),
-                const SizedBox(height: 48),
-                TextFormField(
-                  textAlign: TextAlign.center,
-                  onChanged: (value) {
-                    userEmail = value;
-                    userDirectory = userEmail + '/';
-                  },
-                  decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Enter customer email',
+                  const SizedBox(height: 8),
+                  Text(
+                    displayedText,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Enter an Email Address';
-                    } else if (!value.contains('@')) {
-                      return 'Please enter a valid email address';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 48),
-                ButtonWidget(
-                  text: 'Upload File',
-                  icon: Icons.cloud_upload_outlined,
-                  onClicked: () {
-                    if (_formKey.currentState!.validate()) {
-                      uploadFile();
-                    }
-                  },
-                ),
-                const SizedBox(height: 20),
-                task != null ? buildUploadStatus(task!) : Container(),
-              ],
+                  const SizedBox(height: 48),
+                  TextFormField(
+                    textAlign: TextAlign.center,
+                    onChanged: (value) {
+                      userEmail = value;
+                      userDirectory = userEmail + '/';
+                    },
+                    decoration: kTextFieldDecoration.copyWith(
+                      hintText: 'Enter customer email',
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Enter an Email Address';
+                      } else if (!value.contains('@')) {
+                        return 'Please enter a valid email address';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 48),
+                  ButtonWidget(
+                    text: 'Upload File',
+                    icon: Icons.cloud_upload_outlined,
+                    onClicked: () {
+                      if (_formKey.currentState!.validate()) {
+                        uploadFile();
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  task != null ? buildUploadStatus(task!) : Container(),
+                ],
+              ),
             ),
           ),
         ),
       ),
-      drawer: NavigateDrawer(uid: widget.uid),
+      endDrawer: NavigateDrawer(uid: widget.uid),
     );
   }
 
