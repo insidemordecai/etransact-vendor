@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'eTransact',
+      title: 'eTransact Vendor',
       theme: ThemeData(
         primarySwatch: Palette.kTeal,
       ),
