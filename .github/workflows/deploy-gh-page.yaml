@@ -1,6 +1,4 @@
 name: "Deploy Flutter web app to github pages"
-description: "Automates the build and deployment of your Flutter web app on Github gh pages"
-author: "bluefireteam"
 
 on:
   push:
