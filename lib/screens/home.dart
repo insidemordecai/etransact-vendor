@@ -53,58 +53,60 @@ class _HomeState extends State<Home> {
       body: Container(
         padding: const EdgeInsets.all(32),
         child: Center(
-          child: Form(
-            key: _formKey,
-            child: SizedBox(
-              width: 500.0,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ButtonWidget(
-                    text: 'Select File',
-                    icon: Icons.attach_file,
-                    onClicked: selectFile,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    displayedText,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: SizedBox(
+                width: 500.0,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ButtonWidget(
+                      text: 'Select File',
+                      icon: Icons.attach_file,
+                      onClicked: selectFile,
                     ),
-                  ),
-                  const SizedBox(height: 48),
-                  TextFormField(
-                    textAlign: TextAlign.center,
-                    onChanged: (value) {
-                      userEmail = value;
-                      userDirectory = userEmail + '/';
-                    },
-                    decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'Enter customer email',
+                    const SizedBox(height: 8),
+                    Text(
+                      displayedText,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Enter an Email Address';
-                      } else if (!value.contains('@')) {
-                        return 'Please enter a valid email address';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 48),
-                  ButtonWidget(
-                    text: 'Upload File',
-                    icon: Icons.cloud_upload_outlined,
-                    onClicked: () {
-                      if (_formKey.currentState!.validate()) {
-                        uploadFile();
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  task != null ? buildUploadStatus(task!) : Container(),
-                ],
+                    const SizedBox(height: 48),
+                    TextFormField(
+                      textAlign: TextAlign.center,
+                      onChanged: (value) {
+                        userEmail = value;
+                        userDirectory = userEmail + '/';
+                      },
+                      decoration: kTextFieldDecoration.copyWith(
+                        hintText: 'Enter customer email',
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Enter an Email Address';
+                        } else if (!value.contains('@')) {
+                          return 'Please enter a valid email address';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 48),
+                    ButtonWidget(
+                      text: 'Upload File',
+                      icon: Icons.cloud_upload_outlined,
+                      onClicked: () {
+                        if (_formKey.currentState!.validate()) {
+                          uploadFile();
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    task != null ? buildUploadStatus(task!) : Container(),
+                  ],
+                ),
               ),
             ),
           ),

@@ -35,115 +35,117 @@ class _LogInState extends State<LogIn> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Center(
-            child: SizedBox(
-              width: 500.0,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        title,
-                        style: const TextStyle(
+            child: SingleChildScrollView(
+              child: SizedBox(
+                width: 500.0,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          title,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 50,
+                              fontFamily: 'Roboto'),
+                        ),
+                        const SizedBox(
+                          width: 12.0,
+                        ),
+                        Text(
+                          subTitle,
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 50,
-                            fontFamily: 'Roboto'),
-                      ),
-                      const SizedBox(
-                        width: 12.0,
-                      ),
-                      Text(
-                        subTitle,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 50,
-                          fontFamily: 'Roboto',
-                          color: Palette.kTeal,
+                            fontFamily: 'Roboto',
+                            color: Palette.kTeal,
+                          ),
                         ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 32.0,
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.emailAddress,
+                      textAlign: TextAlign.center,
+                      onChanged: (value) {
+                        email = value;
+                      },
+                      decoration: kTextFieldDecoration.copyWith(
+                        hintText: 'Enter your email',
                       ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 32.0,
-                  ),
-                  TextField(
-                    keyboardType: TextInputType.emailAddress,
-                    textAlign: TextAlign.center,
-                    onChanged: (value) {
-                      email = value;
-                    },
-                    decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'Enter your email',
                     ),
-                  ),
-                  const SizedBox(
-                    height: 24.0,
-                  ),
-                  TextField(
-                    obscureText: true,
-                    textAlign: TextAlign.center,
-                    onChanged: (value) {
-                      password = value;
-                    },
-                    decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'Enter your password',
+                    const SizedBox(
+                      height: 24.0,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 30.0,
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: kRoundedBorder,
-                      fixedSize: kFixedSize,
+                    TextField(
+                      obscureText: true,
+                      textAlign: TextAlign.center,
+                      onChanged: (value) {
+                        password = value;
+                      },
+                      decoration: kTextFieldDecoration.copyWith(
+                        hintText: 'Enter your password',
+                      ),
                     ),
-                    onPressed: () async {
-                      setState(() {
-                        showSpinner = true;
-                      });
-                      try {
-                        await _auth.signInWithEmailAndPassword(
-                          email: email,
-                          password: password,
-                        );
-                        User? loggedUser = FirebaseAuth.instance.currentUser;
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    Home(uid: loggedUser!.uid)),
-                            (Route<dynamic> route) => false);
+                    const SizedBox(
+                      height: 30.0,
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: kRoundedBorder,
+                        fixedSize: kFixedSize,
+                      ),
+                      onPressed: () async {
                         setState(() {
-                          showSpinner = false;
+                          showSpinner = true;
                         });
-                      } on FirebaseAuthException catch (e) {
-                        if (e.code == 'user-not-found') {
+                        try {
+                          await _auth.signInWithEmailAndPassword(
+                            email: email,
+                            password: password,
+                          );
+                          User? loggedUser = FirebaseAuth.instance.currentUser;
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      Home(uid: loggedUser!.uid)),
+                              (Route<dynamic> route) => false);
                           setState(() {
                             showSpinner = false;
                           });
+                        } on FirebaseAuthException catch (e) {
+                          if (e.code == 'user-not-found') {
+                            setState(() {
+                              showSpinner = false;
+                            });
 
-                          kShowToast(
-                              'No user found for that email. Re-enter credentials');
-                        } else if (e.code == 'wrong-password') {
-                          setState(() {
-                            showSpinner = false;
-                          });
+                            kShowToast(
+                                'No user found for that email. Re-enter credentials');
+                          } else if (e.code == 'wrong-password') {
+                            setState(() {
+                              showSpinner = false;
+                            });
 
-                          kShowToast('Wrong password. Re-enter credentials');
-                        } else {
-                          setState(() {
-                            showSpinner = false;
-                          });
+                            kShowToast('Wrong password. Re-enter credentials');
+                          } else {
+                            setState(() {
+                              showSpinner = false;
+                            });
 
-                          kShowToast('Error. Try again!');
+                            kShowToast('Error. Try again!');
+                          }
                         }
-                      }
-                    },
-                    child: const Text('Log In'),
-                  ),
-                ],
+                      },
+                      child: const Text('Log In'),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

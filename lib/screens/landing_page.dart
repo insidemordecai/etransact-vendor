@@ -16,69 +16,71 @@ class LandingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
+        child: SingleChildScrollView(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 50,
+                            fontFamily: 'Roboto'),
+                      ),
+                      const SizedBox(
+                        width: 12.0,
+                      ),
+                      Text(
+                        subTitle,
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 50,
-                          fontFamily: 'Roboto'),
-                    ),
-                    const SizedBox(
-                      width: 12.0,
-                    ),
-                    Text(
-                      subTitle,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 50,
-                        fontFamily: 'Roboto',
-                        color: Palette.kTeal,
+                          fontFamily: 'Roboto',
+                          color: Palette.kTeal,
+                        ),
                       ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: kRoundedBorder,
+                      fixedSize: kFixedSize,
                     ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: kRoundedBorder,
-                    fixedSize: kFixedSize,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SignUp()),
+                      );
+                    },
+                    child: const Text('Create Account'),
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const SignUp()),
-                    );
-                  },
-                  child: const Text('Create Account'),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: kRoundedBorder,
-                    fixedSize: kFixedSize,
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: kRoundedBorder,
+                      fixedSize: kFixedSize,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const LogIn()),
+                      );
+                    },
+                    child: const Text('Log In'),
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const LogIn()),
-                    );
-                  },
-                  child: const Text('Log In'),
                 ),
-              ),
-            ]),
+              ]),
+        ),
       ),
     );
   }
