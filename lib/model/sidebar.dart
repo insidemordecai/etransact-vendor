@@ -1,3 +1,6 @@
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -61,23 +64,34 @@ class _NavigateDrawerState extends State<NavigateDrawer> {
                 }),
           ),
           Expanded(
-            child: Column(
-              children: [
-                ListTile(
-                  leading: const Icon(
-                    Icons.home_rounded,
-                    color: Colors.black,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: const Icon(
+                      Icons.home_rounded,
+                      color: Colors.black,
+                    ),
+                    minLeadingWidth: 20,
+                    title: const Text('Home'),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
                   ),
-                  minLeadingWidth: 20,
-                  title: const Text(
-                    'Home',
-                    textScaleFactor: 1.0,
+                  ListTile(
+                    leading: const Icon(
+                      Icons.receipt_rounded,
+                      color: Colors.black,
+                    ),
+                    minLeadingWidth: 20,
+                    title: const Text('QuickBill'),
+                    onTap: () {
+                      html.window.open(
+                          'https://itsmordecai.github.io/quickbill/', "_blank");
+                    },
                   ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           Padding(
