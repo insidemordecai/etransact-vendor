@@ -88,7 +88,7 @@ class _SignUpState extends State<SignUp> {
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Enter User Name';
+                            return 'Enter vendor Name';
                           }
                           return null;
                         },
