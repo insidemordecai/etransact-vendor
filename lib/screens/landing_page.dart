@@ -6,9 +6,10 @@ import 'signup.dart';
 import 'package:etransact_vendor/constants.dart';
 
 class LandingPage extends StatelessWidget {
+  static const String id = 'landing_page';
+
   final String title = 'eTransact';
   final String subTitle = 'Vendor';
-  static const String id = 'landing_page';
 
   const LandingPage({Key? key}) : super(key: key);
 
@@ -55,10 +56,7 @@ class LandingPage extends StatelessWidget {
                       fixedSize: kFixedSize,
                     ),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const SignUp()),
-                      );
+                      Navigator.pushNamed(context, SignUp.id);
                     },
                     child: const Text('Create Account'),
                   ),
@@ -71,10 +69,7 @@ class LandingPage extends StatelessWidget {
                       fixedSize: kFixedSize,
                     ),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const LogIn()),
-                      );
+                      Navigator.pushNamed(context, LogIn.id);
                     },
                     child: const Text('Log In'),
                   ),
