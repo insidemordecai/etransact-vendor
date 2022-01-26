@@ -28,6 +28,7 @@ class _SignUpState extends State<SignUp> {
 
   final _formKey = GlobalKey<FormState>();
   bool showSpinner = false;
+  bool _isHidden = true;
 
   late String email;
   late String password;
@@ -50,41 +51,45 @@ class _SignUpState extends State<SignUp> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            title,
-                            style: const TextStyle(
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              title,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 50,
+                                  fontFamily: 'Roboto'),
+                            ),
+                            const SizedBox(
+                              width: 12.0,
+                            ),
+                            Text(
+                              subTitle,
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 50,
-                                fontFamily: 'Roboto'),
-                          ),
-                          const SizedBox(
-                            width: 12.0,
-                          ),
-                          Text(
-                            subTitle,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 50,
-                              fontFamily: 'Roboto',
-                              color: Palette.kTeal,
+                                fontFamily: 'Roboto',
+                                color: Palette.kTeal,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       const SizedBox(
                         height: 32.0,
                       ),
                       // using TextFormField (instead of TextField) to make use of validate operations
                       TextFormField(
-                        textAlign: TextAlign.center,
+                        keyboardType: TextInputType.name,
+                        textInputAction: TextInputAction.next,
                         onChanged: (value) {
                           name = value;
                         },
                         decoration: kTextFieldDecoration.copyWith(
-                          hintText: 'Enter vendor name',
+                          hintText: 'Vendor Name',
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -98,12 +103,13 @@ class _SignUpState extends State<SignUp> {
                       ),
                       TextFormField(
                         keyboardType: TextInputType.emailAddress,
-                        textAlign: TextAlign.center,
+                        textCapitalization: TextCapitalization.none,
+                        textInputAction: TextInputAction.next,
                         onChanged: (value) {
                           email = value;
                         },
                         decoration: kTextFieldDecoration.copyWith(
-                          hintText: 'Enter your email',
+                          hintText: 'Email',
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -119,16 +125,31 @@ class _SignUpState extends State<SignUp> {
                       ),
                       TextFormField(
                         obscureText: true,
-                        textAlign: TextAlign.center,
+                        textInputAction: TextInputAction.done,
                         onChanged: (value) {
                           password = value;
                         },
+                        onFieldSubmitted: (value) {
+                          performSignUp();
+                        },
                         decoration: kTextFieldDecoration.copyWith(
-                          hintText: 'Enter your password',
+                          hintText: 'Password',
+                          suffixIcon: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 15.0),
+                            child: IconButton(
+                              onPressed: _togglePasswordView,
+                              icon: Icon(
+                                _isHidden
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                            ),
+                          ),
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Enter Password';
+                            return 'Enter password';
                           } else if (value.length < 6) {
                             return 'Password must be at least 6 characters!';
                           }
@@ -143,46 +164,7 @@ class _SignUpState extends State<SignUp> {
                           shape: kRoundedBorder,
                           fixedSize: kFixedSize,
                         ),
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            setState(() {
-                              showSpinner = true;
-                            });
-
-                            try {
-                              await _auth
-                                  .createUserWithEmailAndPassword(
-                                      email: email, password: password)
-                                  .then((result) {
-                                dbRef.child(result.user!.uid).set({
-                                  "email": email,
-                                  "name": name,
-                                }).then((res) {
-                                  User? loggedUser =
-                                      FirebaseAuth.instance.currentUser;
-                                  Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              Home(uid: loggedUser!.uid)),
-                                      (Route<dynamic> route) => false);
-                                });
-                              });
-
-                              setState(() {
-                                showSpinner = false;
-                              });
-                            } catch (e) {
-                              String errorMessage = e.toString();
-
-                              setState(() {
-                                showSpinner = false;
-                              });
-
-                              kShowToast(errorMessage);
-                            }
-                          }
-                        },
+                        onPressed: performSignUp,
                         child: const Text('Sign Up'),
                       ),
                     ],
@@ -194,5 +176,49 @@ class _SignUpState extends State<SignUp> {
         ),
       ),
     );
+  }
+
+  void _togglePasswordView() {
+    setState(() {
+      _isHidden = !_isHidden;
+    });
+  }
+
+  performSignUp() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        showSpinner = true;
+      });
+
+      try {
+        await _auth
+            .createUserWithEmailAndPassword(email: email, password: password)
+            .then((result) {
+          dbRef.child(result.user!.uid).set({
+            "email": email,
+            "name": name,
+          }).then((res) {
+            User? loggedUser = FirebaseAuth.instance.currentUser;
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Home(uid: loggedUser!.uid)),
+                (Route<dynamic> route) => false);
+          });
+        });
+
+        setState(() {
+          showSpinner = false;
+        });
+      } catch (e) {
+        String errorMessage = e.toString();
+
+        setState(() {
+          showSpinner = false;
+        });
+
+        kShowToast(errorMessage);
+      }
+    }
   }
 }
