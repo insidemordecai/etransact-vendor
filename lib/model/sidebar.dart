@@ -87,7 +87,7 @@ class _NavigateDrawerState extends State<NavigateDrawer> {
                     title: const Text('QuickBill'),
                     onTap: () {
                       html.window.open(
-                          'https://itsmordecai.github.io/eTransact-quickbill/',
+                          'https://itsmordecai.github.io/quickbill/',
                           "_blank");
                     },
                   ),
