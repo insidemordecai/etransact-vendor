@@ -53,26 +53,30 @@ class _SignUpState extends State<SignUp> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        child: Wrap(
+                          alignment: WrapAlignment.center,
                           children: [
-                            Text(
-                              title,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 50,
-                                  fontFamily: 'Roboto'),
+                            FittedBox(
+                              child: Text(
+                                title,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 50,
+                                    fontFamily: 'Roboto'),
+                              ),
                             ),
                             const SizedBox(
                               width: 12.0,
                             ),
-                            Text(
-                              subTitle,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 50,
-                                fontFamily: 'Roboto',
-                                color: Palette.kTeal,
+                            FittedBox(
+                              child: Text(
+                                subTitle,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 50,
+                                  fontFamily: 'Roboto',
+                                  color: Palette.kTeal,
+                                ),
                               ),
                             ),
                           ],
