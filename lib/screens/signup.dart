@@ -128,13 +128,13 @@ class _SignUpState extends State<SignUp> {
                         height: 8.0,
                       ),
                       TextFormField(
-                        obscureText: true,
+                        obscureText: _isHidden,
                         textInputAction: TextInputAction.done,
                         onChanged: (value) {
                           password = value;
                         },
                         onFieldSubmitted: (value) {
-                          performSignUp();
+                          _performSignUp();
                         },
                         decoration: kTextFieldDecoration.copyWith(
                           hintText: 'Password',
@@ -168,7 +168,7 @@ class _SignUpState extends State<SignUp> {
                           shape: kRoundedBorder,
                           fixedSize: kFixedSize,
                         ),
-                        onPressed: performSignUp,
+                        onPressed: _performSignUp,
                         child: const Text('Sign Up'),
                       ),
                     ],
@@ -188,7 +188,7 @@ class _SignUpState extends State<SignUp> {
     });
   }
 
-  performSignUp() async {
+  _performSignUp() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         showSpinner = true;

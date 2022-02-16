@@ -101,7 +101,7 @@ class _LogInState extends State<LogIn> {
                           password = value;
                         },
                         onFieldSubmitted: (value) {
-                          performLogIn();
+                          _performLogIn();
                         },
                         decoration: kTextFieldDecoration.copyWith(
                           hintText: 'Password',
@@ -127,7 +127,7 @@ class _LogInState extends State<LogIn> {
                           shape: kRoundedBorder,
                           fixedSize: kFixedSize,
                         ),
-                        onPressed: performLogIn,
+                        onPressed: _performLogIn,
                         child: const Text('Log In'),
                       ),
                     ],
@@ -147,7 +147,7 @@ class _LogInState extends State<LogIn> {
     });
   }
 
-  performLogIn() async {
+  _performLogIn() async {
     setState(() {
       showSpinner = true;
     });
