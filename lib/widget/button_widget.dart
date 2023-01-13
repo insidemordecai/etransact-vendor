@@ -17,7 +17,7 @@ class ButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: Palette.kTeal,
+          backgroundColor: Palette.kTeal,
           shape: kRoundedBorder,
           minimumSize: const Size.fromHeight(50),
         ),
